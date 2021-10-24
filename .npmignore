@@ -4,3 +4,7 @@
 tsconfig.json
 jest.config.js
 .editorconfig
+demo/
+.github/
+*.spec.js
+*.spec.d.ts

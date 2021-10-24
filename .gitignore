@@ -205,3 +205,4 @@ $RECYCLE.BIN/
 !jest.config.js
 !.editorconfig
 !.npmignore
+!.github/

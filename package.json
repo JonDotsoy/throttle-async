@@ -1,14 +1,19 @@
 {
   "name": "@jondotsoy/throttle-async",
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  },
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "throttle-async.js",
   "scripts": {
     "build": "tsc",
     "clean": "tsc --build --clean",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "release": "standard-version -t @jondotsoy/throttle-async@"
   },
   "keywords": [
     "throttle-async"

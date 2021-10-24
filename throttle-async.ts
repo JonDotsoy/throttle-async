@@ -1,39 +1,9 @@
-// import { promisify } from "util";
-import { Action } from "./types/action";
 import { State } from "./types/state";
-import { Store } from "./store";
-// import { reducer } from "./reducer";
-// import { ArgsType } from "./types/args-type";
+import { Store } from "./util/store";
 import { nextTick } from 'process'
 import { setTimeout } from 'timers/promises'
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'EXECUTE_PROCESS':
-      if (!!state.currentProcess) throw new Error('Process already running');
-      return {
-        ...state,
-        currentProcess: action.currentProcess,
-      }
-    case 'ADD_PENDING_PROCESS': return {
-      ...state,
-      processPendingArgs: action.processPendingArgs,
-    }
-    case 'FINISH_PROCESS': return {
-      ...state,
-      currentProcess: undefined,
-    }
-    case 'EXECUTE_PENDING_PROCESS': return {
-      ...state,
-      processPendingArgs: undefined,
-    }
-    default: return state;
-  }
-}
-
-interface Func<A extends any[] = any[]> {
-  (...args: A): Promise<any>
-}
+import { reducer } from "./reducer";
+import { Func } from "./types/func";
 
 class ThrottleAsync<A extends any[], Fn extends Func<A>> {
   private store = new Store(reducer, {})
@@ -63,9 +33,9 @@ class ThrottleAsync<A extends any[], Fn extends Func<A>> {
   }
 
   invoke(...args: A) {
-    const { currentProcess, processPendingArgs: processPending } = this.store.getState()
+    const { currentProcess, processPendingArgs } = this.store.getState()
 
-    if (!currentProcess && !processPending) {
+    if (!currentProcess && !processPendingArgs) {
       return this.executeProcess(...args);
     }
 
@@ -108,7 +78,7 @@ class ThrottleAsync<A extends any[], Fn extends Func<A>> {
     })
   }
 
-  async waitEnd() {
+  async waitFinish() {
     return new Promise<void>((resolve) => {
       const unsubscribe = this.store.subscribe(() => {
         const { currentProcess, processPendingArgs } = this.store.getState()
@@ -126,7 +96,7 @@ class ThrottleAsync<A extends any[], Fn extends Func<A>> {
     {
       throttleAsync: this as ThrottleAsync<A, Fn>,
       ThrottleAsync: ThrottleAsync,
-      waitEnd: () => this.waitEnd(),
+      waitFinish: () => this.waitFinish(),
     },
   );
 

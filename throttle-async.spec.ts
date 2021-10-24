@@ -16,7 +16,7 @@ describe('throttleAsync', () => {
     await setTimeout(150)
     fn('C')
 
-    await fn.waitEnd()
+    await fn.waitFinish()
 
     expect(a.mock.calls).toMatchInlineSnapshot(`
       Array [
@@ -49,7 +49,7 @@ describe('throttleAsync', () => {
     await setTimeout(150)
     fn('D')
 
-    await fn.waitEnd()
+    await fn.waitFinish()
 
     expect(a.mock.calls).toMatchInlineSnapshot(`
       Array [
@@ -92,6 +92,6 @@ describe('throttleAsync', () => {
       }
     }
 
-    await submit.waitEnd();
+    await submit.waitFinish();
   })
 })
