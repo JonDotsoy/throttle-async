@@ -13,7 +13,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "prepare": "npm run build",
-    "release": "standard-version -t @jondotsoy/throttle-async@"
+    "release": "standard-version -t @jondotsoy/throttle-async@v"
   },
   "keywords": [
     "throttle-async"
